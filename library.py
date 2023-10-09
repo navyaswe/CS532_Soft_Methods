@@ -50,3 +50,32 @@ class CustomMappingTransformer(BaseEstimator, TransformerMixin):
     #self.fit(X,y)
     result = self.transform(X)
     return result
+
+class CustomOHETransformer(BaseEstimator, TransformerMixin):
+  def __init__(self, target_column, dummy_na=False, drop_first=False):
+    self.target_column = target_column
+    self.dummy_na = dummy_na
+    self.drop_first = drop_first
+
+  #fill in the rest below
+  def fit(self, X, y=None):
+    print(f"\nWarning: {self.__class__.__name__}.fit does nothing.\n")
+    return self
+
+  def transform(self, X):
+    assert isinstance(X, pd.core.frame.DataFrame), f'{self.__class__.__name__}.transform expected DataFrame but got {type(X)} instead.'
+    # Check if the target column exists in the DataFrame
+    if self.target_column not in X.columns:
+      error_message = f"\nError: {self.__class__.__name__} - The target column '{self.target_column}' does not exist in the DataFrame.\n"
+      raise AssertionError(error_message)
+
+    X_ = X.copy()
+    # Perform one-hot encoding on the target column
+    X_ = pd.get_dummies(X, columns=[self.target_column], dummy_na=self.dummy_na, drop_first=self.drop_first)
+
+    return X_
+
+  def fit_transform(self, X, y=None):
+    # self.fit(X, y)
+    result = self.transform(X)
+    return result
