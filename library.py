@@ -107,6 +107,7 @@ class CustomSigma3Transformer(BaseEstimator, TransformerMixin):
   def fit_transform(self, X, y=None):
     self.fit(X)
     return self.transform(X)
+
 class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, target_column, fence='outer'):
         assert fence in ['inner', 'outer'], "Fence must be 'inner' or 'outer'"
