@@ -79,3 +79,70 @@ class CustomOHETransformer(BaseEstimator, TransformerMixin):
     # self.fit(X, y)
     result = self.transform(X)
     return result
+  class CustomSigma3Transformer(BaseEstimator, TransformerMixin):
+  def __init__(self, target_column):
+    self.target_column = target_column
+    self.boundaries = None
+
+  def fit(self, X, y=None):
+    assert isinstance(X, pd.DataFrame), "Input data must be a pandas DataFrame"
+    assert self.target_column in X.columns, f'Misspelling "{self.target_column}".'
+
+    mean = X[self.target_column].mean()
+    std = X[self.target_column].std()
+
+    lower_boundary = mean - 3 * std
+    upper_boundary = mean + 3 * std
+
+    self.boundaries = (lower_boundary, upper_boundary)
+    return self
+
+  def transform(self, X):
+    assert self.boundaries is not None, f'"{self.__class__.__name__}": Missing fit.'
+    lower_boundary, upper_boundary = self.boundaries
+
+    X[self.target_column] = np.clip(X[self.target_column], lower_boundary, upper_boundary)
+    return X.reset_index(drop=True)
+
+  def fit_transform(self, X, y=None):
+    self.fit(X)
+    return self.transform(X)
+  class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self, target_column, fence='outer'):
+        assert fence in ['inner', 'outer'], "Fence must be 'inner' or 'outer'"
+        self.target_column = target_column
+        self.fence = fence
+        self.boundaries = None
+
+    def fit(self, X, y=None):
+        assert isinstance(X, pd.DataFrame), "Input data must be a pandas DataFrame"
+        assert self.target_column in X.columns, f'Misspelling "{self.target_column}".'
+
+        q1 = X[self.target_column].quantile(0.25)
+        q3 = X[self.target_column].quantile(0.75)
+        iqr = q3 - q1
+
+        if self.fence == 'outer':
+          outer_low = q1 - 3.0 * iqr
+          outer_high = q3 + 3.0 * iqr
+          self.boundaries = (outer_low, outer_high)
+        else:
+          inner_low = q1 - 1.5 * iqr
+          inner_high = q3 + 1.5 * iqr
+          self.boundaries = (inner_low, inner_high)
+
+
+        return self
+
+    def transform(self, X):
+        assert self.boundaries is not None, f'"{self.__class__.__name__}": Missing fit.'
+
+        lower_boundary, upper_boundary = self.boundaries
+
+        X[self.target_column] = X[self.target_column].clip(lower=lower_boundary, upper=upper_boundary)
+
+        return X.reset_index(drop=True)
+
+    def fit_transform(self, X, y=None):
+        self.fit(X)
+        return self.transform(X)
