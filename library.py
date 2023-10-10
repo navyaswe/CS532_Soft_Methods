@@ -79,7 +79,7 @@ class CustomOHETransformer(BaseEstimator, TransformerMixin):
     # self.fit(X, y)
     result = self.transform(X)
     return result
-  class CustomSigma3Transformer(BaseEstimator, TransformerMixin):
+class CustomSigma3Transformer(BaseEstimator, TransformerMixin):
   def __init__(self, target_column):
     self.target_column = target_column
     self.boundaries = None
@@ -107,7 +107,7 @@ class CustomOHETransformer(BaseEstimator, TransformerMixin):
   def fit_transform(self, X, y=None):
     self.fit(X)
     return self.transform(X)
-  class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
+class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, target_column, fence='outer'):
         assert fence in ['inner', 'outer'], "Fence must be 'inner' or 'outer'"
         self.target_column = target_column
