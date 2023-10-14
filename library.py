@@ -100,9 +100,9 @@ class CustomSigma3Transformer(BaseEstimator, TransformerMixin):
   def transform(self, X):
     assert self.boundaries is not None, f'"{self.__class__.__name__}": Missing fit.'
     lower_boundary, upper_boundary = self.boundaries
-
-    X[self.target_column] = np.clip(X[self.target_column], lower_boundary, upper_boundary)
-    return X.reset_index(drop=True)
+    X_ = X.copy()
+    X_[self.target_column] = np.clip(X_[self.target_column], lower_boundary, upper_boundary)
+    return X_.reset_index(drop=True)
 
   def fit_transform(self, X, y=None):
     self.fit(X)
@@ -139,10 +139,10 @@ class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
         assert self.boundaries is not None, f'"{self.__class__.__name__}": Missing fit.'
 
         lower_boundary, upper_boundary = self.boundaries
+        X_ = X.copy()
+        X_[self.target_column] = X_[self.target_column].clip(lower=lower_boundary, upper=upper_boundary)
 
-        X[self.target_column] = X[self.target_column].clip(lower=lower_boundary, upper=upper_boundary)
-
-        return X.reset_index(drop=True)
+        return X_.reset_index(drop=True)
 
     def fit_transform(self, X, y=None):
         self.fit(X)
