@@ -12,6 +12,7 @@ sklearn.set_config(transform_output="pandas")  #says pass pandas tables through 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 
+#Custom Mapping Transformer
 class CustomMappingTransformer(BaseEstimator, TransformerMixin):
 
   def __init__(self, mapping_column, mapping_dict:dict):
@@ -58,6 +59,7 @@ class CustomMappingTransformer(BaseEstimator, TransformerMixin):
     result = self.transform(X)
     return result
 
+#One Hot Encoding Transformer
 class CustomOHETransformer(BaseEstimator, TransformerMixin):
   def __init__(self, target_column, dummy_na=False, drop_first=False):
     self.target_column = target_column
@@ -115,6 +117,7 @@ class CustomSigma3Transformer(BaseEstimator, TransformerMixin):
     self.fit(X)
     return self.transform(X)
 
+#Tukey Transformer
 class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, target_column, fence='outer'):
         assert fence in ['inner', 'outer'], "Fence must be 'inner' or 'outer'"
@@ -154,6 +157,8 @@ class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
     def fit_transform(self, X, y=None):
         self.fit(X)
         return self.transform(X)
+
+#Robust Scaler Transformer
 class CustomRobustTransformer(BaseEstimator, TransformerMixin):
   def __init__(self, column):
     self.column = column
@@ -179,7 +184,8 @@ class CustomRobustTransformer(BaseEstimator, TransformerMixin):
     # Fit and transform the specified column
     self.fit(X)
     return self.transform(X)
-  
+
+#Function to find the random speed to test and train data set
 def find_random_state(features_df, labels, n=200):
   model = KNeighborsClassifier(n_neighbors=5)  #k = 5
   var = []  
@@ -197,9 +203,11 @@ def find_random_state(features_df, labels, n=200):
   idx = np.array(abs(var - rs_value)).argmin()  #index of the smallest value
   return idx
 
+#random state variables for titanic and customer data sets
 titanic_variance_based_split = 107
 customer_variance_based_split = 113
 
+#Data Wrangling on Titanic data set
 titanic_transformer = Pipeline(steps=[
     ('map_gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
     ('map_class', CustomMappingTransformer('Class', {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
@@ -214,6 +222,7 @@ titanic_transformer = Pipeline(steps=[
     ('imputer', KNNImputer(n_neighbors=5, weights="uniform", add_indicator=False))  #from chapter 6
     ], verbose=True)
 
+#Data Wrangling on the customer data set
 customer_transformer = Pipeline(steps=[
     ('map_os', CustomMappingTransformer('OS', {'Android': 0, 'iOS': 1})),
     ('target_isp', ce.TargetEncoder(cols=['ISP'],
