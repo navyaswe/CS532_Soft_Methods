@@ -1,3 +1,7 @@
+import subprocess
+import sys
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'category_encoders'])  #replaces !pip install
+import category_encoders as ce
 import pandas as pd
 import numpy as np
 import sklearn
