@@ -57,7 +57,7 @@ class CustomMappingTransformer(BaseEstimator, TransformerMixin):
     return X_
 
   def fit_transform(self, X, y = None):
-    #self.fit(X,y)
+    self.fit(X,y)
     result = self.transform(X)
     return result
 
