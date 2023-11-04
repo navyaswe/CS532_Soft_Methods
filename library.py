@@ -153,8 +153,8 @@ class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
         lower_boundary, upper_boundary = self.boundaries
         X_ = X.copy()
         X_[self.target_column] = X_[self.target_column].clip(lower=lower_boundary, upper=upper_boundary)
-
-        return X_.reset_index()
+        return X_
+        #return X_.reset_index()
         
 
     def fit_transform(self, X, y=None):
