@@ -154,9 +154,9 @@ class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
         X_ = X.copy()
         X_[self.target_column] = X_[self.target_column].clip(lower=lower_boundary, upper=upper_boundary)
 
-        #return X_.reset_index(drop=True)
+        return X_.reset_index(drop=True)
         #return X_.reset_index()
-        return X_.reset_index(drop=False)
+        #return X_.reset_index(drop=False)
         #return X_['index'] = X_['index'].round().astype(int)
 
     def fit_transform(self, X, y=None):
@@ -183,7 +183,8 @@ class CustomRobustTransformer(BaseEstimator, TransformerMixin):
     X_ = X.copy()
     X_[self.column] = (X_[self.column] - self.median_) / self.iqr_
     #X_[self.column].fillna(0, inplace=True)  # Fill NaN values with 0
-    return X_
+    #return X_
+    return X_.reset_index(drop=True)
 
   def fit_transform(self, X, y=None):
     # Fit and transform the specified column
