@@ -53,7 +53,7 @@ class CustomMappingTransformer(BaseEstimator, TransformerMixin):
 
     #do actual mapping
     X_ = X.copy()
-    X_[self.mapping_column].replace(self.mapping_dict, inplace=True)
+    X_[self.mapping_column].replace(self.mapping_dict, inplace=True,drop = False)
     return X_
 
   def fit_transform(self, X, y = None):
@@ -154,7 +154,7 @@ class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
         X_ = X.copy()
         X_[self.target_column] = X_[self.target_column].clip(lower=lower_boundary, upper=upper_boundary)
 
-        return X_.reset_index(drop=True)
+        return X_.reset_index(drop=False)
 
     def fit_transform(self, X, y=None):
         self.fit(X)
@@ -179,7 +179,7 @@ class CustomRobustTransformer(BaseEstimator, TransformerMixin):
     # Apply the Robust Transformer transformation to the specified column
     X_ = X.copy()
     X_[self.column] = (X_[self.column] - self.median_) / self.iqr_
-    X_[self.column].fillna(0, inplace=True)  # Fill NaN values with 0
+    #X_[self.column].fillna(0, inplace=True)  # Fill NaN values with 0
     return X_
 
   def fit_transform(self, X, y=None):
