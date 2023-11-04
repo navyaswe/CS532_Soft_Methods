@@ -179,7 +179,7 @@ class CustomRobustTransformer(BaseEstimator, TransformerMixin):
     # Apply the Robust Transformer transformation to the specified column
     X_ = X.copy()
     X_[self.column] = (X_[self.column] - self.median_) / self.iqr_
-    #X_[self.column].fillna(0, inplace=True)  # Fill NaN values with 0
+    X_[self.column].fillna(0, inplace=True)  # Fill NaN values with 0
     return X_
 
   def fit_transform(self, X, y=None):
