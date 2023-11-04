@@ -53,7 +53,7 @@ class CustomMappingTransformer(BaseEstimator, TransformerMixin):
 
     #do actual mapping
     X_ = X.copy()
-    X_[self.mapping_column].replace(self.mapping_dict, inplace=True,drop = False)
+    X_[self.mapping_column].replace(self.mapping_dict, inplace=True)
     return X_
 
   def fit_transform(self, X, y = None):
