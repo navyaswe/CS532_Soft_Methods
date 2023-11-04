@@ -12,6 +12,7 @@ sklearn.set_config(transform_output="pandas")  #says pass pandas tables through 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 
 
 #Custom Mapping Transformer
