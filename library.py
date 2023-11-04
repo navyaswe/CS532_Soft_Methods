@@ -156,8 +156,8 @@ class CustomTukeyTransformer(BaseEstimator, TransformerMixin):
 
         #return X_.reset_index(drop=True)
         #return X_.reset_index()
-        X_ = X_.reset_index(drop=True)
-        return X_['index'] = X_['index'].round().astype(int)
+        return X_.reset_index(drop=False)
+        #return X_['index'] = X_['index'].round().astype(int)
 
     def fit_transform(self, X, y=None):
         self.fit(X)
