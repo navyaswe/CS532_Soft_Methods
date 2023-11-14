@@ -16,6 +16,8 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from sklearn.experimental import enable_halving_search_cv
 from sklearn.model_selection import HalvingGridSearchCV
+from xgboost import XGBClassifier  #using sklearn compatible version
+xgb_model = XGBClassifier(random_state=1234, objective='binary:logistic', eval_metric='auc')
 
 
 #Custom Mapping Transformer
